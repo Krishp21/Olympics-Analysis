@@ -64,17 +64,18 @@ def most_successful(df, sport):
         temp_df = temp_df[temp_df['Sport'] == sport]
 
     # Count the number of medals won by each athlete
-    athlete_medals = temp_df['Name'].value_counts().reset_index().head(15)
+    athlete_medals = temp_df['Name'].value_counts().reset_index()
 
-    # Rename columns for clarity
-    athlete_medals.rename(columns={'index': 'Name', 'Name': 'Medals'}, inplace=True)
+     # Rename columns for clarity
+    athlete_medals.columns = ['Name', 'Medals']
+
+    # Get the top 15 athletes with the most medals
+    top_15 = athlete_medals.nlargest(15, 'Medals')
 
     # Merge with the original DataFrame to get additional details like 'Sport' and 'region'
-    athlete_details = athlete_medals.merge(df, on='Name', how='left')[['Name', 'Medals', 'Sport', 'region']]
+    athlete_details = top_15.merge(temp_df, left_on='Name', right_on='Name', how='left')[['Name', 'Medals', 'Sport', 'region']]
 
     # Drop duplicates to avoid repetitive information
-    athlete_details = athlete_details.drop_duplicates(subset=['Name', 'Sport', 'region'])
+    athlete_details = athlete_details.drop_duplicates(subset=['Name'])
 
     return athlete_details
-
-

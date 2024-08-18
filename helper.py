@@ -50,18 +50,31 @@ def country_year_list(df):
 
 
 def data_over_time(df, col):
-    nations_over_time = df.drop_duplicates(['Year', col])['Year'].value_counts().reset_index().sort_values('index')
-    nations_over_time.rename(columns={'index': 'Edition', 'Year': col}, inplace=True)
+
+    nations_over_time = df.drop_duplicates(['Year', col])['Year'].value_counts().reset_index().sort_values("Year")
+    nations_over_time.rename(columns={'Year':'Edition','count':'No of countries'},inplace=True)
     return nations_over_time
 
-
-def most_successful(df,sport):
+def most_successful(df, sport):
+    # Drop rows where 'Medal' is NaN
     temp_df = df.dropna(subset=['Medal'])
 
+    # Filter by sport if not 'Overall'
     if sport != 'Overall':
         temp_df = temp_df[temp_df['Sport'] == sport]
 
-    x=temp_df['Name'].value_counts().reset_index().head(15).merge(df,left_on='index',right_on='Name',how='left')[['index','Name_x','Sport','region']].drop_duplicates('index')
-    x.rename(columns={'index':'Name','Name_x':'Medals'},inplace=True)
-    return x
+    # Count the number of medals won by each athlete
+    athlete_medals = temp_df['Name'].value_counts().reset_index().head(15)
+
+    # Rename columns for clarity
+    athlete_medals.rename(columns={'index': 'Name', 'Name': 'Medals'}, inplace=True)
+
+    # Merge with the original DataFrame to get additional details like 'Sport' and 'region'
+    athlete_details = athlete_medals.merge(df, on='Name', how='left')[['Name', 'Medals', 'Sport', 'region']]
+
+    # Drop duplicates to avoid repetitive information
+    athlete_details = athlete_details.drop_duplicates(subset=['Name', 'Sport', 'region'])
+
+    return athlete_details
+
 

@@ -71,17 +71,19 @@ if user_menu == 'Overall Analysis':
         st.title(athletes)
 
     nations_over_time = helper.data_over_time(df, 'region')
-    fig = px.line(nations_over_time, x="Edition", y="region")
+    fig = px.line(nations_over_time, x="Edition", y="No of countries")
     st.title("Participating Nations over the years")
     st.plotly_chart(fig)
 
     events_over_time = helper.data_over_time(df, 'Event')
-    fig = px.line(events_over_time, x="Edition", y="Event")
+    events_over_time.rename(columns={"No of countries": "No of events"}, inplace=True)
+    fig = px.line(events_over_time, x="Edition", y="No of events")
     st.title("Events over the years")
     st.plotly_chart(fig)
 
     athlete_over_time = helper.data_over_time(df, 'Name')
-    fig = px.line(athlete_over_time, x="Edition", y="Name")
+    athlete_over_time.rename(columns={"No of countries": "No of athletes"}, inplace=True)
+    fig = px.line(athlete_over_time, x="Edition", y="No of athletes")
     st.title("Athletes over the years")
     st.plotly_chart(fig)
 
@@ -99,7 +101,6 @@ if user_menu == 'Overall Analysis':
     selected_sport = st.selectbox('Select a Sport', sport_list)
     x = helper.most_successful(df, selected_sport)
     st.table(x)
-
 
 
 

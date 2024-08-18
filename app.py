@@ -5,6 +5,8 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.figure_factory as ff
+import streamlit as st
+
 
 df = pd.read_csv('athlete_events.csv')
 region_df = pd.read_csv('noc_regions.csv')
@@ -21,7 +23,31 @@ user_menu = st.sidebar.radio(
     'Select an Option:',
     ('Medal Tally', 'Overall Analysis', 'Country-Wise Analysis', 'Athlete Wise Analysis')
 )
+main_gradient = (
+    'linear-gradient(to right, '
+    '#A6C8FF, '  
+    '#FFF7BF, ' 
+    '#D1D1D1, '  
+    '#BFFFBF, '  
+    '#FF7F7F)'
+)
 
+sidebar_color = '#2C3E50'
+
+st.markdown(
+    f"""
+    <style>
+    .main {{
+        background: {main_gradient};
+        background-attachment: fixed;
+    }}
+    .css-1d391kg {{
+        background-color: {sidebar_color};
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 #st.dataframe(df)
 
 if user_menu == 'Medal Tally':
@@ -33,7 +59,7 @@ if user_menu == 'Medal Tally':
     if selected_year == 'Overall' and selected_country == 'Overall':
         st.title("Overall Tally")
     if selected_year != 'Overall' and selected_country == 'Overall':
-        st.title("Medal Tally in " + str(selected_year) + "Olympics")
+        st.title("Medal Tally in " + str(selected_year) + " Olympics")
     if selected_year == 'Overall' and selected_country != 'Overall' :
         st.title(selected_country + " overall performance")
     if selected_year != 'Overall' and selected_country != 'Overall':

@@ -19,7 +19,7 @@ user_menu = st.sidebar.radio(
     ('Medal Tally', 'Overall Analysis', 'Country-Wise Analysis', 'Athlete Wise Analysis')
 )
 
-st.dataframe(df)
+#st.dataframe(df)
 
 if user_menu == 'Medal Tally':
     st.sidebar.header("Medal Tally")
@@ -101,6 +101,29 @@ if user_menu == 'Overall Analysis':
     selected_sport = st.selectbox('Select a Sport', sport_list)
     x = helper.most_successful(df, selected_sport)
     st.table(x)
+
+
+if user_menu == 'Country-Wise Analysis':
+
+    st.sidebar.title('Country-Wise Analysis')
+
+    country_list = df['region'].dropna().unique().tolist()
+    country_list.sort()
+    selected_country = st.sidebar.selectbox('Select a Country', country_list)
+    country_df = helper.yearwise_medal_tally(df, selected_country)
+    fig = px.line(country_df, x="Year", y="Medal")
+    st.title(selected_country + " Medal Tally over the years")
+    st.plotly_chart(fig)
+
+    st.title(selected_country + " excels in the following sports")
+    pt = helper.country_event_heatmap(df,selected_country)
+    fig, ax = plt.subplots(figsize=(20, 20))
+    ax = sns.heatmap(pt, annot=True)
+    st.pyplot(fig)
+
+    st.title("Top-10 Athletes of " + selected_country)
+    top10_df = helper.most_successful_countrywise(df,selected_country)
+    st.table(top10_df)
 
 
 

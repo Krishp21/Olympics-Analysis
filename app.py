@@ -7,6 +7,17 @@ import seaborn as sns
 import plotly.figure_factory as ff
 import streamlit as st
 
+st.markdown(
+    """
+    <style>
+    .dark-text {
+        color: #000000; /* Dark color for text */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 
 df = pd.read_csv('athlete_events.csv')
 region_df = pd.read_csv('noc_regions.csv')
@@ -22,11 +33,11 @@ def set_page(page_name):
 
 def show_intro():
     st.markdown(
-        "<h1 style='text-align: center; font-weight: bold;'>Olympics - Analysis</h1>",
+        "<h1 class='dark-text' style='text-align: center; font-weight: bold;'>Olympics - Analysis</h1>",
         unsafe_allow_html=True
     )
     st.markdown(
-        "<p style='text-align: center;'>"
+        "<p class='dark-text' style='text-align: center;'>"
         "This project is a comprehensive web application developed using Streamlit to analyze and visualize Olympic Games data. It provides users with insights into medal tallies, overall statistics, country-wise performance, and athlete details."
         "Users can explore data visualizations such as line charts, heatmaps, and distribution plots to understand patterns in medal counts, participation trends, and athlete statistics. The application aims to offer a user-friendly interface for exploring historical Olympic data, highlighting key statistics and trends across various dimensions."
         "</p>",
@@ -43,6 +54,7 @@ def show_intro():
             margin-top: 50px;
             
         }
+        
         </style>
         """,
         unsafe_allow_html=True
@@ -62,13 +74,8 @@ def show_main_app():
         'Select an Option:',
         ('Medal Tally', 'Overall Analysis', 'Country-Wise Analysis', 'Athlete Wise Analysis')
     )
-    main_gradient = (
-        'linear-gradient(to right, '
-        '#E0F7FA, '  
-        '#B2EBF2, '  
-        '#80DEEA, '  
-        '#4DD0E1)'
-    )
+    main_gradient = 'linear-gradient(to right, #B2EBF2, #80DEEA);'
+
 
     sidebar_color = '#2C3E50'
 
@@ -84,7 +91,7 @@ def show_main_app():
             background-color: {sidebar_color};
         }}
         .css-1v3fvcr .css-1d391kg {{
-            color: #333333;  /* Consistent dark text color in the sidebar */
+            color: #333333;  
         }}
         </style>
         """,
